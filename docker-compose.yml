@@ -1,0 +1,32 @@
+version: '3'
+networks:
+  internal:
+  web:
+    external: true
+services:
+  db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_DATABASE: updgrade_it
+      MYSQL_ROOT_PASSWORD: upgrade_it
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+  drupal:
+    depends_on:
+      - db
+    build: .
+    volumes:
+      - ./app:/app
+    #network_mode: host
+    restart: always
+  #solr:
+  #  image: solr:7.5
+  #  ports:
+  #    - "8983:8983"
+    #volumes:
+    #  - core2:/opt/solr/server/solr/core2
+volumes:
+  db_data:
+  #core2:
